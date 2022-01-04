@@ -22,10 +22,12 @@ epitopes = ['mers', 'sars', 'sarscov2']
 
 for ep in epitopes:
     df = pd.read_csv("epitopes/%s.csv" % ep, keep_default_na=False)
-    df.drop(df.columns[[0,3,4,7,8,17,18,19,20,21,22,23,24,25,26,27]], axis=1, inplace=True)
+    #df.drop(df.columns[[0,3,4,7,8,17,18,19,20,21,22,23,24,25,26,27]], axis=1, inplace=True)
+    df.drop(df.columns[[0]], axis=1, inplace=True)
     df.columns = map(str.lower, df.columns)
     df.columns = map(lambda s: s.replace(" ", "_"), df.columns)
 
+    
     # map types to.. strings (who cares)
     types = {}
     for c in df.columns:

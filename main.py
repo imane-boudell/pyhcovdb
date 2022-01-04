@@ -22,6 +22,7 @@ def getUniqeValues(field_name, filter_):
     result = Virus.query.with_entities(col).filter(filter_).distinct().all()
     buff = [i[0] for i in result]
     buff = list(sorted(buff, key=lambda x: (x is None or x == "N/A", x)))
+    
     return buff
 
 def getUniqeValues2(field_name1, field_name2, filter_):
@@ -41,11 +42,12 @@ def algo_msa(msa_type: str, seq_id: List[int], consensus: bool = None):
         return "Cannot process more than 10 sequences for MSA. Operation aborted."
 
     result = Virus.query.with_entities("id", "fasta").filter(Virus.id.in_(seq_id))
+    
     result_dict = {}
     for r in result:
         result_dict[r[0]] = r[1]
 
-    fasta_file = "/Users/imane/tmp/%s" % str(uuid.uuid4())
+    fasta_file = "/root/tmp/%s" % str(uuid.uuid4())
     with open(fasta_file, "w") as fasta:
         # Ensure ordering of sequences based on input
         for i in seq_id:
@@ -58,7 +60,7 @@ def algo_msa(msa_type: str, seq_id: List[int], consensus: bool = None):
         msa_command = ClustalOmegaCommandline(infile=fasta_file)
         ret = msa_command()
     else: # if msa_type == "mview":
-        clustal_file = "/Users/imane/tmp/%s" % str(uuid.uuid4())
+        clustal_file = "/root/tmp/%s" % str(uuid.uuid4())
         msa_command = ClustalOmegaCommandline(infile=fasta_file, outfile=clustal_file)
         msa_command()
         con = "on" if consensus else "off"
@@ -163,11 +165,12 @@ def read_search_criteria_ex(virus_specimen: str, sequence_type: str, gene_symbol
         in_gene_symbol, in_host, in_country, in_collection_date)
 
     ret = {}
-    ret["genes"] = getUniqeValues2("gene_symbol", "gene_product_name", and_filter)
+    #ret["genes"] = getUniqeValues2("gene_symbol", "gene_product_name", and_filter)
     ret["gene_symbol"] = getUniqeValues("gene_symbol", and_filter)
     ret["gene_product_name"] = getUniqeValues("gene_product_name", and_filter)
     ret["host"] = getUniqeValues("host", and_filter)
     ret["country"] = getUniqeValues("country", and_filter)
     ret["collection_date"] = getUniqeValues("collection_date", and_filter)
+    
 
     return ret
