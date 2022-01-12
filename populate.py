@@ -23,7 +23,7 @@ epitopes = ['mers', 'sars', 'sarscov2']
 for ep in epitopes:
     df = pd.read_csv("epitopes/%s.csv" % ep, keep_default_na=False)
     #df.drop(df.columns[[0,3,4,7,8,17,18,19,20,21,22,23,24,25,26,27]], axis=1, inplace=True)
-    df.drop(df.columns[[0]], axis=1, inplace=True)
+    df.drop(df.columns[[1]], axis=1, inplace=True)
     df.columns = map(str.lower, df.columns)
     df.columns = map(lambda s: s.replace(" ", "_"), df.columns)
 
@@ -50,8 +50,7 @@ print(df.head(5))
 types = {"id": Integer(), 'genbank_genome_accession': String(255), 'gene_symbol': String(255),
          'gene_product_name': String(255),
          'genbank_protein_accession': String(255), 'strain_name': String(255), 'isolate': String(255),
-         'isolation_source': String(255), 'virus_specimen': String(255), 'host': String(255),
-         'collection_date': String(8),
+         'isolation_source': String(255), 'virus_specimen': String(255),'host_full': String(255), 'host': String(255), 'collection_date': String(8),
          'country': String(255), 'sequence_type': String(4),'fasta': Text()}
 
 
